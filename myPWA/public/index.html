@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Ensures correct character encoding for all text -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Enables responsive scaling on mobile devices -->
+    <title>Warami HS Parking System</title>
+
+    <!-- Modular CSS Files -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css"> <!-- Buttons, cards, reusable UI components -->
+    <link rel="stylesheet" href="css/forms.css"> <!-- Form styling for inputs and sliders -->
+    <link rel="stylesheet" href="css/layout.css"> <!-- Page layout and container structure -->
+    <link rel="stylesheet" href="css/modals.css"> <!-- Modal window styling -->
+    <link rel="stylesheet" href="css/responsive.css"> <!-- Breakpoints for mobile/tablet responsiveness -->
+    <link rel="stylesheet" href="css/roster.css"> <!-- Parking roster grid and color legend styles --> 
+</head>
+<body>
+    <div class="container"> <!-- Main application wrapper -->
+
+        <!-- Main Menu -->
+        <div id="mainMenu" class="menu-container active"> <!-- Default visible menu screen -->
+            <div class="menu-header">
+                <h1>Main Menu</h1>
+                <p>Warami High School Parking System</p>
+            </div>
+            <div class="menu-buttons"> <!-- Navigation buttons to different system modes -->
+                <button class="menu-btn" onclick="showMenu('fileInput')">
+                    <span class="btn-number">1</span>
+                    <span class="btn-text">Default File Input Mode</span>
+                </button>
+                <button class="menu-btn" onclick="showMenu('manualEntry')">
+                    <span class="btn-number">2</span>
+                    <span class="btn-text">Optional Manual Entry Mode</span>
+                </button>
+                <button class="menu-btn" onclick="showMenu('parkingRoster')">
+                    <span class="btn-number">3</span>
+                    <span class="btn-text">View Parking Roster Interface</span>
+                </button>
+                <button class="menu-btn" onclick="showMenu('searchTeacher')">
+                    <span class="btn-number">4</span>
+                    <span class="btn-text">Search Teacher Allocation</span>
+                </button>
+                <button class="menu-btn exit-btn" onclick="exitApplication()">
+                    <span class="btn-number">5</span>
+                    <span class="btn-text">Exit Application</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- File Input Mode -->
+        <div id="fileInput" class="menu-container"> <!-- Hidden until user selects File Input Mode -->
+            <div class="menu-header">
+                <h2>Faculty File Upload Portal</h2>
+                <button class="back-btn" onclick="showMenu('mainMenu')">← Back</button> <!-- Returns to main menu -->
+            </div>
+            <div class="file-upload-container">
+                <div id="facultyUploadList" class="faculty-list"></div> <!-- Dynamic list of uploaded files -->
+                <div class="upload-actions">
+                    <button onclick="uploadAllFiles()" class="action-btn">Upload All Files</button> <!-- Triggers batch upload -->
+                    <button onclick="generateRoster()" class="action-btn primary">Generate Roster</button> <!-- Builds roster from uploaded data -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Entry Mode -->
+        <div id="manualEntry" class="menu-container"> <!-- Manual teacher entry interface -->
+            <div class="menu-header">
+                <h2>Manual Teacher Entry Form</h2>
+                <button class="back-btn" onclick="showMenu('mainMenu')">← Back</button>
+            </div>
+            <form class="manual-form" onsubmit="submitManualEntry(event)"> <!-- Prevents page reload on submit -->
+                <div class="form-group">
+                    <label for="teacherName">Enter Teacher Full Name:</label>
+                    <input type="text" id="teacherName" required> <!-- Teacher name input -->
+                </div>
+                <div class="form-group">
+                    <label for="facultySelect">Select Faculty Group:</label>
+                    <select id="facultySelect" required> <!-- Dropdown for faculty assignment -->
+                        <option value="">-- Select Faculty --</option>
+                        <option value="English">English</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
+                        <option value="TAS">Technological and Applied Studies (TAS)</option>
+                        <option value="CAPA">Creative and Performing Arts (CAPA)</option>
+                        <option value="PDHPE">Personal Development, Health and Physical Education (PD/H/PE)</option>
+                        <option value="History & Languages">History and Languages</option>
+                        <option value="HSIE">Human Society and Its Environment (HSIE)</option>
+                        <option value="Learning Support">Learning Support</option>
+                        <option value="Admin Support">Student Administration and Support</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="daysSlider">Days Present Per Fortnight (1 to 10):</label>
+                    <div class="slider-container">
+                        <input type="range" id="daysSlider" min="1" max="10" value="5" oninput="updateDaysDisplay(this.value)"> <!-- Updates display in real time -->
+                        <span id="daysDisplay">5</span> <!-- Shows current slider value -->
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="action-btn primary">Submit Data</button> <!-- Adds teacher to list -->
+                    <button type="reset" class="action-btn">Clear Form</button> <!-- Resets all fields -->
+                </div>
+            </form>
+            <div id="teacherList" class="teacher-list"></div> <!-- Displays manually added teachers -->
+        </div>
+
+        <!-- Parking Roster Viewer -->
+        <div id="parkingRoster" class="menu-container"> <!-- Roster viewing interface -->
+            <div class="menu-header">
+                <h2>Daily Parking Roster Viewer</h2>
+                <button class="back-btn" onclick="showMenu('mainMenu')">← Back</button>
+            </div>
+            <div class="roster-controls"> <!-- Week/day selection controls -->
+                <div class="week-tabs">
+                    <button class="tab-btn active" onclick="selectWeek(1)">Week 1</button> <!-- Switches roster to Week 1 -->
+                    <button class="tab-btn" onclick="selectWeek(2)">Week 2</button> <!-- Switches roster to Week 2 -->
+                </div>
+                <div class="day-buttons">
+                    <button class="day-btn active" onclick="selectDay(1)">Monday</button> <!-- Loads Monday roster -->
+                    <button class="day-btn" onclick="selectDay(2)">Tuesday</button>
+                    <button class="day-btn" onclick="selectDay(3)">Wednesday</button>
+                    <button class="day-btn" onclick="selectDay(4)">Thursday</button>
+                    <button class="day-btn" onclick="selectDay(5)">Friday</button>
+                </div>
+            </div>
+            <div id="rosterGrid" class="parking-grid"></div> <!-- Dynamic grid showing allocated parking spaces -->
+            <div class="legend">
+                <h3>Faculty Color Legend</h3>
+                <div id="legendItems" class="legend-items"></div> <!-- Auto-generated color legend -->
+            </div>
+        </div>
+
+        <!-- Search Teacher -->
+        <div id="searchTeacher" class="menu-container"> <!-- Search interface for teacher allocations -->
+            <div class="menu-header">
+                <h2>Roster Search Panel</h2>
+                <button class="back-btn" onclick="showMenu('mainMenu')">← Back</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Enter Teacher Name:" oninput="executeSearch()"> <!-- Live search input -->
+                <button onclick="executeSearch()" class="action-btn">Search</button> <!-- Manual search trigger -->
+            </div>
+            <div id="searchResults" class="search-results"></div> <!-- Displays search matches -->
+        </div>
+
+        <!-- Modals -->
+        <div id="spaceModal" class="modal"> <!-- Modal for viewing parking space details -->
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span> <!-- Closes modal -->
+                <div id="modalBody"></div> <!-- Injected modal content -->
+            </div>
+        </div>
+
+        <div id="alertModal" class="modal"> <!-- General-purpose alert modal -->
+            <div class="modal-content alert-modal">
+                <span class="close" onclick="closeAlert()">&times;</span>
+                <p id="alertMessage"></p> <!-- Displays alert text -->
+                <button onclick="closeAlert()" class="action-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JS Modules  -->
+    <script src="js/config.js"></script> <!-- System configuration and constants -->
+    <script src="js/modals.js"></script> <!-- Modal open/close logic -->
+    <script src="js/roster.js"></script> <!-- Roster generation and grid rendering -->
+    <script src="js/search.js"></script> <!-- Teacher search functionality -->
+    <script src="js/teachers.js"></script> <!-- Teacher data handling and validation -->
+    <script src="js/ui.js"></script> <!-- Menu switching and UI interactions -->
+</body>
+</html>

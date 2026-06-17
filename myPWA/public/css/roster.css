@@ -1,0 +1,58 @@
+/* PARKING ROSTER & GRID */
+
+.roster-controls {
+    margin-bottom: 30px;
+}
+
+.week-tabs,
+.day-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.tab-btn,
+.day-btn {
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tab-btn.active,
+.day-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.parking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.parking-space {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.parking-space.vacant {
+    background: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+}

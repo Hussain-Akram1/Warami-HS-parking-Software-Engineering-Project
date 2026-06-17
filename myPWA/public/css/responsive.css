@@ -1,0 +1,32 @@
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+    .menu-container { padding: 20px; }
+    .menu-header h1 { font-size: 1.8em; }
+    .menu-header h2 { font-size: 1.5em; }
+    .menu-buttons { grid-template-columns: 1fr; }
+    .parking-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    .week-tabs, .day-buttons { flex-direction: column; }
+    .tab-btn, .day-btn { width: 100%; }
+    .legend-items { grid-template-columns: 1fr; }
+}
+
+.error {
+    color: #f5576c;
+    background: #ffe0e6;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.success {
+    color: #27ae60;
+    background: #d5f4e6;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #667eea;
+}
